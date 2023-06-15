@@ -52,7 +52,7 @@ One of the variables in the dataset is `revolutions`, the number of revolutions,
 ```{r}
 library(modelsummary); library(tidyverse)
 
-GrowthSW <- GrowthSW %>% mutate(rev_or_not = if_else(revolutions > 0, 'treat', '0'))
+GrowthSW <- GrowthSW %>% mutate(rev_or_not = if_else(revolutions > 0, 'treat', 'revolutions = 0'))
 
 datasummary(growth + rgdp60 ~ factor(rev_or_not) * (Mean + median + sd + min + max),
             data = GrowthSW)
@@ -71,10 +71,10 @@ In question 2, we have seen that growth rates differ markedly between countries 
 
 ```{r}
 # write t test here
-t.test(GrowthSW$growth, GrowthSW$rev_or_not, 
-                    alternative = c("two.sided"),
-                    mu = 100 , paired = TRUE, var.equal = FALSE,
-                    conf.level = 0.95)
+t.test(GrowthSW$growth, GrowthSW$rev_or_not = NULL,
+       Alternative = c("two.sided"),
+       var.equal = FALSE, paired = FALSE,
+       conf.level = 0.95)
 
 ```
 
