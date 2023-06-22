@@ -52,9 +52,9 @@ One of the variables in the dataset is `revolutions`, the number of revolutions,
 ```{r}
 library(modelsummary); library(tidyverse)
 
-GrowthSW <- GrowthSW %>% mutate(if_else(revolutions == 0, "revolutions greater than 0", "revolutions equal to 0" ))
+GrowthSW <- GrowthSW %>% mutate(if_else(revolutions == 0, "revolutions equal to 0", "revolutions greater than 0" ))
 
-GrowthSW <- GrowthSW %>% rename('treat' = 'if_else(revolutions == 0, "revolutions greater than 0", "revolutions equal to 0")')
+GrowthSW <- GrowthSW %>% rename('treat' = 'if_else(revolutions == 0, "revolutions equal to 0", "revolutions greater than 0")')
 
 datasummary <- datasummary(growth + rgdp60 ~ treat * (mean + median + sd + min + max), data = GrowthSW) 
 print(datasummary)
