@@ -97,9 +97,9 @@ We now want to estimate a stepwise model. Stepwise means that we first estimate 
 
 ```{r}
 model1 <- lm(growth ~ treat, data = GrowthSW)
-model2 <- lm(growth ~ rgdp60, data = GrowthSW)
-model3 <- lm(growth ~ tradeshare, data = GrowthSW)
-model4 <- lm(growth ~ education, data = GrowthSW)
+model2 <- lm(growth ~ treat + rgdp60, data = GrowthSW)
+model3 <- lm(growth ~ treat + rgdp60 + tradeshare, data = GrowthSW)
+model4 <- lm(growth ~ treat + rgdp60 + tradeshare + education, data = GrowthSW)
 ```
 
 Now, we put the models in a list, and see what `modelsummary` gives us:
@@ -116,7 +116,7 @@ list(model1, model2, model3, model4) |>
 
 **Question 3.6**: According to this analysis, what is the main driver of economic growth? Why?
 
-Revolutions?
+according to this analysis the main driver of economic growth is tradeshare, this is because its coeficcients are way higher than the other variables. this means that for an increase in tradeshare growth increases more relative to an increase, by the same amount, in a different factor.
 
 
 
@@ -132,15 +132,10 @@ list(model1, model2, model3, model4) |>
 **Question 3.8**: Write a piece of code that exports this table (without the formatting) to a Word document. 
 
 ```{r}
-library(sjPlot)
-
-modelsummary <- list(model1, model2, model3, model4) |>
-  modelsummary(stars=T, gof_map = c("nobs", "r.squared")
-              
+list(model1, model2, model3, model4) |>
+  modelsummary(stars=T, gof_map = c("nobs", "r.squared"),
+               output = "modelsummary.docx"
 ) 
-
-
-tab_df(modelsummary, file = "modelsummary.doc")
 
 ```
 
