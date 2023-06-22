@@ -32,7 +32,7 @@ This interpretation will not be graded, but a Github shows the contributors to a
 
 **Question 1.1**: Fill in the __github username__ of the class mate to whose repository you have contributed. 
 
-[Fill in here]
+[YYUU1407]
 
 ### Part 2: Analyzing various linear models
 
@@ -52,10 +52,12 @@ One of the variables in the dataset is `revolutions`, the number of revolutions,
 ```{r}
 library(modelsummary); library(tidyverse)
 
-GrowthSW <- GrowthSW %>% mutate(rev_or_not = if_else(revolutions > 0, 'treat', 'revolutions = 0'))
+GrowthSW <- GrowthSW %>% mutate(if_else(revolutions == 0, "revolutions greater than 0", "revolutions equal to 0" ))
 
-datasummary(growth + rgdp60 ~ factor(rev_or_not) * (Mean + median + sd + min + max),
-            data = GrowthSW)
+GrowthSW <- GrowthSW %>% rename('treat' = 'if_else(revolutions == 0, "revolutions greater than 0", "revolutions equal to 0")')
+
+datasummary <- datasummary(growth + rgdp60 ~ treat * (mean + median + sd + min + max), data = GrowthSW) 
+print(datasummary)
 
 # write your code here
 ```
@@ -71,15 +73,13 @@ In question 2, we have seen that growth rates differ markedly between countries 
 
 ```{r}
 # write t test here
-t.test(GrowthSW$growth, GrowthSW$rev_or_not = NULL,
-       Alternative = c("two.sided"),
-       var.equal = FALSE, paired = FALSE,
-       conf.level = 0.95)
+t.test(GrowthSW$growth ~ GrowthSW$treat)
 
 ```
 
 **Question 3.2**: What is the $p$-value of the test, and what does that mean? Write down your answer below.
 
+the p-value is 0.06871 ?????
 
 We can also control for other factors by including them in a linear model, for example:
 
@@ -89,22 +89,25 @@ $$
 
 **Question 3.3**: What do you think the purpose of including the variable `rgdp60` is? Look at `?GrowthSW` to find out what the variables mean. 
 
+including the variable `rgdp60` is purposefully done to have some form of benchmark to the value of currency. if this wasn't included there is no way to pair growth to some other variable and conclude a difference.
 
 We now want to estimate a stepwise model. Stepwise means that we first estimate a univariate regression $\text{growth}_i = \beta_0 + \beta_1 \cdot \text{treat}_i + \epsilon_i$, and in each subsequent model, we add one control variable. 
 
 **Question 3.4**: Write four models, titled `model1`, `model2`, `model3`, `model4` (using the `lm` function) to memory. Hint: you can also use the `update` function to add variables to an already existing specification.
 
 ```{r}
-
+model1 <- lm(growth ~ treat, data = GrowthSW)
+model2 <- lm(growth ~ rgdp60, data = GrowthSW)
+model3 <- lm(growth ~ tradeshare, data = GrowthSW)
+model4 <- lm(growth ~ education, data = GrowthSW)
 ```
 
 Now, we put the models in a list, and see what `modelsummary` gives us:
 
 ```{r}
 list(model1, model2, model3, model4) |>
-  modelsummary(stars=T,
-# edit this to remove the statistics other than R-squared
-# and N
+  modelsummary(stars=T, gof_map = c("nobs", "r.squared")
+              
 ) 
 
 ```
@@ -112,6 +115,10 @@ list(model1, model2, model3, model4) |>
 **Question 3.5**: Edit the code chunk above to remove many statistics from the table, but keep only the number of observations $N$, and the $R^2$ statistic. 
 
 **Question 3.6**: According to this analysis, what is the main driver of economic growth? Why?
+
+Revolutions?
+
+
 
 **Question 3.7**: In the code chunk below, edit the table such that the cells (including standard errors) corresponding to the variable `treat` have a red background and white text. Make sure to load the `kableExtra` library beforehand.
 
