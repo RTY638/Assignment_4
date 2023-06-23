@@ -62,7 +62,7 @@ print(datasummary)
 # write your code here
 ```
 
-**Designated place**: type one or two sentences describing this table of a fellow student below. For example, comment on the mean and median growth of both groups. Then stage, commit and push it to their github repository. 
+**Designated place**: Looking at the table it becomes evident that in countries without revolutions the growth is more seen than with revolutions. It can be observed by looking at values of median and mean(2.29 and 2.46)
 
 
 ### Part 3: Make a table summarizing reressions using modelsummary and kable
